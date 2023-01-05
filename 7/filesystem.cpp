@@ -16,7 +16,8 @@ std::vector<Dir>::iterator FileSystem::findDir(std::string path) {
     if (d != current_dir.dirs.end()) {
         return d;
     } else {
-        throw std::runtime_error("No such directory");
+        mkdir(path);
+        return d;
     }
 }
 
@@ -34,7 +35,7 @@ void FileSystem::cd(std::string path) {
 
 void FileSystem::ls() {
     for (auto d : current_dir.dirs) {
-        std::cout << d.name << std::endl;
+        std::cout << "dir " << d.name << std::endl;
     }
     for (auto f : current_dir.files) {
         std::cout << f << std::endl;
