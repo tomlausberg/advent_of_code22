@@ -1,25 +1,23 @@
 #ifndef FILESYSTEM_H
 #define FILESYSTEM_H
 
-#include <vector>
-#include <string>
 #include <memory>
+#include <string>
+#include <vector>
 
-class File
-{
-public:
+class File {
+   public:
     std::string name;
     int size;
     File(std::string name, int size) {
         this->name = name;
         this->size = size;
     }
-    friend std::ostream& operator<<(std::ostream& os, const File& f){
+    friend std::ostream& operator<<(std::ostream& os, const File& f) {
         os << f.size << " " << f.name;
         return os;
     }
 };
-
 
 class Dir {
    public:
@@ -31,13 +29,13 @@ class Dir {
     Dir();
     ~Dir();
     bool operator==(const std::string& other);
-
 };
 
 class FileSystem {
    private:
     Dir root;
-    Dir& current_dir = root;    
+    Dir& current_dir = root;
+
    public:
     FileSystem();
     // ~FileSystem();

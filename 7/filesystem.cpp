@@ -1,10 +1,11 @@
+#include "filesystem.hpp"
+
 #include <algorithm>
+#include <exception>
 #include <iostream>
 #include <memory>
 #include <string>
 #include <vector>
-#include <exception>
-#include "filesystem.hpp"
 
 FileSystem::FileSystem() {
     root = Dir();
@@ -21,7 +22,6 @@ std::vector<Dir>::iterator FileSystem::findDir(std::string path) {
     }
 }
 
-
 void FileSystem::cd(std::string path) {
     if (path == "/") {
         current_dir = root;
@@ -30,7 +30,6 @@ void FileSystem::cd(std::string path) {
     } else {
         current_dir = *findDir(path);
     }
-
 }
 
 void FileSystem::ls() {
@@ -52,7 +51,6 @@ void FileSystem::mkfil(std::string name, int size) {
     current_dir.files.push_back(new_file);
 }
 
-
 Dir::Dir(std::string name, Dir* parent) {
     this->name = name;
     this->parent = parent;
@@ -72,6 +70,4 @@ Dir::~Dir() {
     // TODO: recursively delete all dirs and files
 }
 
-bool Dir::operator==(const std::string& other) {
-    return this->name == other;
-}
+bool Dir::operator==(const std::string& other) { return this->name == other; }

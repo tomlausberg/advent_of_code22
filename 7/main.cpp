@@ -11,12 +11,12 @@
 #include "../helpers/helpers.h"
 #include "filesystem.hpp"
 
-void parseLs(std::ifstream& file, FileSystem& fs){
+void parseLs(std::ifstream& file, FileSystem& fs) {
     std::string line;
     std::string arg1, arg2;
-    while (true){
+    while (true) {
         int p = file.peek();
-        if (p == '$' || p == EOF){
+        if (p == '$' || p == EOF) {
             break;
         }
         std::getline(file, line);
@@ -38,7 +38,7 @@ void parseInput(std::ifstream& file, FileSystem& fs) {
     std::string arg;
     std::vector<std::string> output;
     while (std::getline(file, line)) {
-        std::istringstream iss(line); 
+        std::istringstream iss(line);
         iss >> dollar >> command;
         if (command == "cd") {
             iss >> arg;
@@ -49,8 +49,7 @@ void parseInput(std::ifstream& file, FileSystem& fs) {
     }
 }
 
-
-int main(int argc, char const *argv[]) {
+int main(int argc, char const* argv[]) {
     // read input file
     std::string filename = "testinput.txt";
     std::ifstream file(filename);
@@ -61,6 +60,6 @@ int main(int argc, char const *argv[]) {
     fs.ls();
     fs.cd("/");
     fs.ls();
-    
+
     return 0;
 }
