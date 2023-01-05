@@ -1,19 +1,16 @@
-# Specify the target file and the objects that it depends on
-main: main.o
-	# Specify the command to create the target file
-	g++ main.o -o main
+CC = g++
+CFLAGS = -std=c++11 -O2
 
-# Debug target
-debug: main.o
-	g++ main.o -g -o main
+all: main
 
-# Specify how to create the object files
-main.o: main.cpp
-	g++ -c main.cpp
+main: main.o filesystem.o
+	$(CC) $(CFLAGS) main.o filesystem.o -o main
 
-helpers.o: helpers.cpp
-	g++ -c helpers.cpp
+main.o: main.cpp filesystem.hpp
+	$(CC) $(CFLAGS) -c main.cpp
 
-# Specify a clean target that removes object files and the target
+filesystem.o: filesystem.cpp filesystem.hpp
+	$(CC) $(CFLAGS) -c filesystem.cpp
+
 clean:
 	rm -f *.o main

@@ -1,3 +1,9 @@
+#include <algorithm>
+#include <iostream>
+#include <memory>
+#include <string>
+#include <vector>
+#include <exception>
 #include "filesystem.hpp"
 
 FileSystem::FileSystem() {
@@ -5,39 +11,66 @@ FileSystem::FileSystem() {
     current_dir = root;
 }
 
-void Filesystem::cd(std::string path) {
+std::vector<Dir>::iterator FileSystem::findDir(std::string path) {
+    auto d = find(current_dir.dirs.begin(), current_dir.dirs.end(), path);
+    if (d != current_dir.dirs.end()) {
+        return d;
+    } else {
+        throw std::runtime_error("No such directory");
+    }
+}
+
+
+void FileSystem::cd(std::string path) {
     if (path == "/") {
         current_dir = root;
+    } else if (path == "..") {
+        current_dir = *current_dir.parent;
     } else {
-       if (find(dirs.begin(), dirs.end(), path) != dirs.end()) {
-           current_dir = path;
-       } else {
-           std::cout << "No such directory" << std::endl;
-       }
+        current_dir = *findDir(path);
     }
 
 }
 
-void Filesystem::ls(std::string path) {
-    if (path == "/") {
-        for (int i = 0; i < root.dirs.size(); i++) {
-            std::cout << root.dirs[i] << std::endl;
-        }
-    } else {
-        if (find(dirs.begin(), dirs.end(), path) != dirs.end()) {
-            for (int i = 0; i < path.dirs.size(); i++) {
-                std::cout << path.dirs[i] << std::endl;
-            }
-        } else {
-            std::cout << "No such directory" << std::endl;
-        }
+void FileSystem::ls() {
+    for (auto d : current_dir.dirs) {
+        std::cout << d.name << std::endl;
+    }
+    for (auto f : current_dir.files) {
+        std::cout << f << std::endl;
     }
 }
 
-Dir::Dir() {
-    files = std::vector<int>();
+void FileSystem::mkdir(std::string path) {
+    Dir new_dir = Dir(path, &current_dir);
+    current_dir.dirs.push_back(new_dir);
+}
+
+void FileSystem::mkfil(std::string name, int size) {
+    File new_file = File(name, size);
+    current_dir.files.push_back(new_file);
+}
+
+
+Dir::Dir(std::string name, Dir* parent) {
+    this->name = name;
+    this->parent = parent;
+    files = std::vector<File>();
     dirs = std::vector<Dir>();
 }
 
-Dir::~Dir() {}
-* args */
+Dir::Dir() {
+    // an empty root directory
+    this->name = "/";
+    this->parent = this;
+    files = std::vector<File>();
+    dirs = std::vector<Dir>();
+}
+
+Dir::~Dir() {
+    // TODO: recursively delete all dirs and files
+}
+
+bool Dir::operator==(const std::string& other) {
+    return this->name == other;
+}
